@@ -1,0 +1,742 @@
+<title>SOS Tracas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --bg:#ffffff;
+    --surface:#ffffff;
+    --surface-2:#f5f5f2;
+    --line:#e3e7e0;
+    --ink:#152825;
+    --ink-soft:#57675f;
+    --accent:#d9622b;
+    --accent-ink:#7a3512;
+    --accent-soft:#fbe3d3;
+    --teal:#2c6a5c;
+    --teal-soft:#e3efe9;
+    --gold:#c9942e;
+    --gold-soft:#f6e8cb;
+    --bad:#c0402e;
+    --bad-soft:#fbe0da;
+    --shadow: 0 1px 2px rgba(21,40,37,0.05), 0 8px 22px -14px rgba(21,40,37,0.16);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#101a17; --surface:#16221e; --surface-2:#1c2a25;
+      --ink:#eaf1ec; --ink-soft:#a7bab2; --line:#2a3a34;
+      --accent:#ef8148; --accent-ink:#ffd9bd; --accent-soft:#3a2418;
+      --teal:#6fbba6; --teal-soft:#1c332c; --gold:#e0b45c; --gold-soft:#33290f;
+      --bad:#ef6b58; --bad-soft:#3a1e18;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 22px -14px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#101a17; --surface:#16221e; --surface-2:#1c2a25;
+    --ink:#eaf1ec; --ink-soft:#a7bab2; --line:#2a3a34;
+    --accent:#ef8148; --accent-ink:#ffd9bd; --accent-soft:#3a2418;
+    --teal:#6fbba6; --teal-soft:#1c332c; --gold:#e0b45c; --gold-soft:#33290f;
+    --bad:#ef6b58; --bad-soft:#3a1e18;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 22px -14px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans', system-ui, sans-serif; margin:0; padding-inline:20px; line-height:1.55;}
+  .wrap{max-width:840px; margin:0 auto;}
+  h1,h2,h3{font-family:'Fraunces', Georgia, serif; text-wrap:balance; letter-spacing:-0.01em; margin:0;}
+  code,.mono{font-family:'IBM Plex Mono', ui-monospace, monospace;}
+  a{color:var(--teal);}
+
+  .nav{
+    position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0;
+    background:color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line); font-size:13px;
+  }
+  .nav .brand{display:flex; align-items:center; gap:8px; font-weight:600; font-family:'Fraunces', serif; font-size:16px;}
+  .nav .dot{width:9px; height:9px; border-radius:50%; background:var(--accent); flex:none;}
+  .nav a{color:var(--ink-soft); text-decoration:none; padding:4px 2px; border-bottom:2px solid transparent;}
+  .nav a:hover{color:var(--ink); border-color:var(--accent);}
+  .navlinks{display:flex; gap:16px; overflow-x:auto; scrollbar-width:none;}
+  .navlinks::-webkit-scrollbar{display:none;}
+
+  .hero{padding-block:44px 28px;}
+  .kicker{display:inline-flex; align-items:center; gap:6px; font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent-ink); background:var(--accent-soft); border-radius:100px; padding:5px 10px; margin-bottom:16px;}
+  .hero h1{font-size:clamp(32px, 6vw, 52px); font-weight:700;}
+  .hero .sub{font-size:16px; color:var(--ink-soft); max-width:56ch; margin-top:14px;}
+  .metarow{display:flex; flex-wrap:wrap; gap:10px; margin-top:24px;}
+  .metachip{display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:9px 13px; font-size:13px; box-shadow:var(--shadow);}
+  .metachip .num{font-family:'IBM Plex Mono', monospace; font-weight:600; color:var(--teal);}
+
+  section{padding-block:36px; border-top:1px solid var(--line);}
+  .eyebrow{font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--teal); margin-bottom:8px;}
+  h2{font-size:clamp(22px,3.4vw,28px); margin-bottom:14px;}
+  p{margin:0 0 12px;}
+  p:last-child{margin-bottom:0;}
+
+  .story{background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:22px 24px; box-shadow:var(--shadow);}
+  .story h3{font-size:19px; margin-bottom:10px;}
+  .brief{margin-top:16px; border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 12px 12px 0; padding:14px 16px; font-size:14.5px;}
+  .brief strong{color:var(--accent-ink); font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; display:block; margin-bottom:6px;}
+
+  .timeline{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0;}
+  .timeline li{display:grid; grid-template-columns:28px 1fr; gap:14px; padding-block:14px; position:relative;}
+  .timeline li:not(:last-child)::before{content:""; position:absolute; left:13px; top:34px; bottom:-6px; width:2px; background:var(--line);}
+  .tstep{width:28px; height:28px; border-radius:50%; background:var(--surface); border:2px solid var(--teal); color:var(--teal); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:12px; flex:none; z-index:1;}
+  .tstep-txt strong{display:block; font-size:15px; margin-bottom:2px;}
+  .tstep-txt span{color:var(--ink-soft); font-size:13.5px;}
+  .durnote{font-size:12.5px; color:var(--ink-soft); margin-top:12px; font-style:italic;}
+
+  .conds{list-style:none; margin:0 0 22px; padding:0; display:grid; gap:10px;}
+  .conds li{display:flex; gap:10px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:14.5px;}
+  .conds li::before{content:"•"; color:var(--accent); font-weight:700; flex:none;}
+
+  .prodhead{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:14px;}
+  .drawbtn{font-family:'IBM Plex Mono', monospace; font-size:12.5px; font-weight:600; background:var(--teal); color:#fff; border:none; border-radius:100px; padding:10px 16px; cursor:pointer; letter-spacing:0.02em; display:inline-flex; align-items:center; gap:8px;}
+  .drawbtn:hover{background:var(--accent);}
+  .drawbtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  .prodgrid{display:grid; grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); gap:12px;}
+  .prod{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 15px; box-shadow:var(--shadow); position:relative; cursor:pointer; transition:transform .15s ease, border-color .15s ease;}
+  .prod:hover{border-color:var(--teal);}
+  .prod:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+  .prod .pv{width:100%; height:64px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; background:var(--teal-soft); border-radius:10px;}
+  .prod .pv svg{width:44px; height:44px;}
+  .prod .pn{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft); margin-bottom:6px;}
+  .prod .pt{font-weight:600; font-size:14.5px; margin-bottom:5px;}
+  .prod .pd{font-size:12.5px; color:var(--ink-soft); margin-bottom:8px;}
+  .prod .pc{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--teal); background:var(--teal-soft); display:inline-block; padding:3px 8px; border-radius:100px;}
+  .prod.picked{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft), var(--shadow); transform:translateY(-2px);}
+  .prod .tag{position:absolute; top:-9px; right:12px; background:var(--accent); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:100px; display:none;}
+  .prod.picked .tag{display:inline-block;}
+
+  /* pillars / accordion */
+  .pillars{display:grid; gap:14px;}
+  details.pillar{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); overflow:hidden;}
+  details.pillar summary{
+    list-style:none; cursor:pointer; display:grid; grid-template-columns:44px 1fr auto; gap:16px; align-items:center;
+    padding:18px 20px;
+  }
+  details.pillar summary::-webkit-details-marker{display:none;}
+  details.pillar summary::marker{content:"";}
+  .pnum{width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-weight:700; font-size:19px; color:#fff; flex:none;}
+  details.pillar:nth-of-type(1) .pnum{background:var(--teal);}
+  details.pillar:nth-of-type(2) .pnum{background:var(--gold);}
+  details.pillar:nth-of-type(3) .pnum{background:var(--accent);}
+  details.pillar:nth-of-type(4) .pnum{background:#8a5fb0;}
+  .ptitle h3{font-size:18px; margin-bottom:3px;}
+  .ptitle span{font-size:13px; color:var(--ink-soft);}
+  .chev{color:var(--ink-soft); transition:transform .2s ease; flex:none;}
+  details[open] .chev{transform:rotate(180deg);}
+  .pillarbody{padding:0 22px 24px; border-top:1px solid var(--line); margin-top:2px; padding-top:18px;}
+  .pillarbody ul{margin:0 0 10px; padding-left:18px; font-size:14.5px;}
+  .pillarbody li{margin-bottom:6px;}
+  .pillarbody p{font-size:14.5px; color:var(--ink-soft);}
+  .askself{font-size:13.5px; background:var(--teal-soft); border-radius:10px; padding:10px 12px; margin-top:10px;}
+  .askself strong{color:var(--teal);}
+  .watch{font-size:13px; background:var(--surface-2); border-radius:10px; padding:10px 12px; color:var(--ink-soft); margin-top:10px;}
+  .watch strong{color:var(--ink);}
+
+  .taskbox{
+    border:1.5px solid var(--accent); border-radius:12px; padding:14px 16px; margin-top:16px;
+    background:var(--accent-soft);
+  }
+  .taskbox .th{
+    display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:11.5px;
+    font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent-ink); margin-bottom:10px;
+  }
+  .taskbox ol{margin:0; padding-left:18px; font-size:14px; color:var(--ink);}
+  .taskbox li{margin-bottom:7px;}
+  .taskbox li:last-child{margin-bottom:0;}
+
+  /* price calculator */
+  .tool{background:var(--surface-2); border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; margin-top:16px;}
+  .tool h4{font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--teal); margin:0 0 14px; font-weight:600;}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:13px; font-weight:600; margin-bottom:6px;}
+  select, input[type=number]{
+    width:100%; font-family:'IBM Plex Sans', sans-serif; font-size:14px; padding:9px 10px;
+    border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+  }
+  input[type=range]{width:100%; accent-color:var(--teal);}
+  .rangeval{display:flex; justify-content:space-between; font-size:12.5px; color:var(--ink-soft); margin-top:4px;}
+  .rangeval .live{font-family:'IBM Plex Mono', monospace; font-weight:600; color:var(--teal); font-size:14px;}
+  .results{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:16px;}
+  .result{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:11px 13px;}
+  .result .rl{font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;}
+  .result .rv{font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:17px;}
+  .result.hi .rv{color:var(--accent);}
+  .formula{font-size:12px; color:var(--ink-soft); margin-top:14px; font-family:'IBM Plex Mono', monospace; background:var(--surface); border:1px dashed var(--line); border-radius:8px; padding:9px 11px;}
+
+  .checkgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:6px;}
+  .cf{display:flex; flex-direction:column; gap:4px;}
+  .cf label{font-size:12.5px; font-weight:600;}
+  .fb{font-size:12px; min-height:15px; display:block;}
+  .fb.ok{color:var(--teal); font-weight:600;}
+  .fb.bad{color:var(--bad); font-weight:600;}
+  .checkstatus{font-size:13px; margin:10px 0 4px; min-height:18px;}
+  .checkstatus.bad{color:var(--bad);}
+
+  /* levers as cards with built-in 12-month budget planning */
+  .leverCard{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:10px;}
+  .leverHead{display:grid; grid-template-columns:1fr auto 30px; gap:10px; align-items:center;}
+  .leverName{font-weight:600; font-size:13.5px;}
+  .leverSubtotal{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--teal); white-space:nowrap;}
+  .leverDel{
+    background:var(--surface-2); border:1px solid var(--line); border-radius:8px; width:30px; height:34px;
+    cursor:pointer; color:var(--ink-soft); font-size:16px; line-height:1;
+  }
+  .leverDel:hover{background:var(--bad-soft); color:var(--bad); border-color:var(--bad);}
+  .monthGrid{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-top:12px;}
+  .monthcell{display:flex; flex-direction:column; gap:3px;}
+  .monthcell .mlabel{font-size:10.5px; color:var(--ink-soft); text-align:center; font-family:'IBM Plex Mono', monospace;}
+  .monthcell input{width:100%; padding:6px 4px; font-size:12px; text-align:center;}
+  .addLeverRow{margin-top:4px; margin-bottom:6px;}
+  @media (max-width:520px){
+    .monthGrid{grid-template-columns:repeat(4,1fr);}
+  }
+
+  /* budget allocator */
+  .budgethead{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .budgettotal{font-family:'IBM Plex Mono', monospace; font-size:14px;}
+  .budgettotal b{color:var(--teal); font-size:16px;}
+  .levers{display:grid; gap:10px;}
+  .lever{display:grid; grid-template-columns:1fr 110px; gap:10px; align-items:center; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px;}
+  .lever .ln{font-size:13.5px; font-weight:600;}
+  .lever .ld{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .lever .lin{display:flex; align-items:center; gap:4px;}
+  .lever .lin input{text-align:right;}
+  .budgetbar{height:10px; border-radius:100px; background:var(--surface); border:1px solid var(--line); overflow:hidden; margin-top:16px;}
+  .budgetbar-fill{height:100%; background:var(--teal); width:0%; transition:width .15s ease, background .15s ease;}
+  .budgetbar-fill.over{background:var(--bad);}
+  .budgetstatus{display:flex; justify-content:space-between; font-size:13px; margin-top:8px;}
+  .budgetstatus .remaining{font-family:'IBM Plex Mono', monospace; font-weight:600;}
+  .budgetstatus .remaining.over{color:var(--bad);}
+  .budgetstatus .remaining.ok{color:var(--teal);}
+
+  .coh{display:grid; gap:10px; margin-bottom:16px;}
+  .coh li{list-style:none; background:var(--teal-soft); border-radius:12px; padding:12px 14px; font-size:14.5px; display:flex; gap:10px;}
+  .coh li::before{content:"⟷"; color:var(--teal); font-weight:700; flex:none;}
+  .synth{border:1.5px dashed var(--accent); border-radius:12px; padding:14px 16px; font-size:14.5px; background:var(--accent-soft);}
+
+  .delivs{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;}
+  .deliv{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow);}
+  .deliv .dh{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--teal); margin-bottom:6px;}
+  .deliv p{font-size:14.5px;}
+
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);}
+  table{border-collapse:collapse; width:100%; min-width:520px; font-size:14px; background:var(--surface);}
+  th, td{text-align:left; padding:12px 14px; border-bottom:1px solid var(--line);}
+  th{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+
+  footer{padding-block:30px 50px; font-size:12.5px; color:var(--ink-soft); text-align:center;}
+
+  @media (max-width:520px){
+    .pnum{width:36px; height:36px; font-size:16px; border-radius:10px;}
+    details.pillar summary{grid-template-columns:36px 1fr auto;}
+    .results{grid-template-columns:1fr;}
+  }
+</style>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <div class="brand"><span class="dot"></span> SOS Tracas</div>
+    <div class="navlinks">
+      <a href="#brief">Brief</a>
+      <a href="#produits">Produits</a>
+      <a href="#mix">Mix</a>
+      <a href="#livrables">Livrables</a>
+      <a href="#bareme">Barème</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <span class="kicker">TD · Mix marketing</span>
+    <h1>Le mix marketing de SOS&nbsp;Tracas</h1>
+    <p class="sub">Chaque groupe choisit un gadget anti-tracas climatique et construit, en équipe, le lancement complet du produit : Produit, Prix, Distribution, Communication.</p>
+    <div class="metarow">
+      <div class="metachip"><span class="num">3–4</span> par groupe</div>
+      <div class="metachip"><span class="num">1</span> produit par groupe</div>
+      <div class="metachip"><span class="num">4</span> piliers à tenir ensemble</div>
+      <div class="metachip"><span class="num">✎</span> Rendu écrit uniquement</div>
+    </div>
+  </header>
+
+  <section id="brief">
+    <div class="eyebrow">Contexte</div>
+    <h2>Pourquoi ce TD</h2>
+    <p>L'objectif n'est pas de remplir quatre cases séparément, mais de vérifier que Produit, Prix, Distribution et Communication se justifient les uns les autres. Le rendu est uniquement écrit : c'est sur le document rendu que doit se lire la cohérence globale du mix, sans présentation orale.</p>
+
+    <div class="story" style="margin-top:20px;">
+      <h3>L'histoire de la marque</h3>
+      <p>SOS Tracas est une jeune entreprise française fondée en 2023 par deux ingénieurs excédés d'annuler leurs barbecues à cause des guêpes et de cuire dans leur salon lors des canicules. Leur constat : les tracas liés au climat se multiplient chaque été, mais les solutions existantes sont dépassées ou inutilisables au quotidien. Leur premier produit s'est vendu en quelques mois. L'entreprise cherche maintenant à étoffer sa gamme.</p>
+      <div class="brief">
+        <strong>Consigne</strong>
+        SOS Tracas recrute chaque groupe comme équipe marketing externe, le temps du TD. Choisir un produit dans la banque ci-dessous, puis construire l'ensemble du mix comme si le dossier de lancement devait être remis, par écrit, au comité de direction en fin de séance.
+      </div>
+    </div>
+  </section>
+
+  <section id="deroule">
+    <div class="eyebrow">Déroulé</div>
+    <h2>Organisation de la séance</h2>
+    <ul class="timeline">
+      <li><span class="tstep">1</span><span class="tstep-txt"><strong>Constitution des groupes</strong><span>3 à 4 personnes par groupe.</span></span></li>
+      <li><span class="tstep">2</span><span class="tstep-txt"><strong>Choix du produit et de la cible</strong><span>Décision collective, validée avant de passer à la suite.</span></span></li>
+      <li><span class="tstep">3</span><span class="tstep-txt"><strong>Construction du mix</strong><span>Travail en groupe sur les 4 piliers, à l'aide de la grille ci-dessous.</span></span></li>
+      <li><span class="tstep">4</span><span class="tstep-txt"><strong>Vérification de cohérence</strong><span>Relecture croisée des 4 piliers entre eux.</span></span></li>
+      <li><span class="tstep">5</span><span class="tstep-txt"><strong>Remise du rendu écrit</strong><span>Dépôt du document final, aucune présentation orale.</span></span></li>
+    </ul>
+    <p class="durnote">La durée de chaque étape reste à la charge de l'intervenant et n'apparaît pas ici.</p>
+  </section>
+
+  <section id="produits">
+    <div class="eyebrow">Cadrage</div>
+    <h2>Contraintes communes</h2>
+    <ul class="conds">
+      <li>Une cible précise dès le départ (âge, situation, besoin), pas une cible vague type « tout le monde »</li>
+      <li>Un concurrent direct identifiable et analysé, propre au produit précis choisi (pas un concurrent générique de la marque SOS Tracas), pas seulement cité par son nom</li>
+    </ul>
+
+    <div class="prodhead">
+      <h2 style="margin:0;">Banque de produits</h2>
+      <button class="drawbtn" id="drawBtn" type="button">🎲 Tirer un produit au hasard</button>
+    </div>
+    <p style="margin-bottom:16px; font-size:14px; color:var(--ink-soft);">Un produit par groupe. Cliquer sur une carte pour la sélectionner, ou tirer au hasard. Le coût de revient indiqué sert de base au pilier Prix.</p>
+    <div class="prodgrid" id="prodGrid">
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><path d="M10 24a14 6 0 1 0 28 0a14 6 0 1 0 -28 0" stroke-linecap="round"/><circle cx="24" cy="24" r="3.2" fill="var(--ink-soft)" stroke="none"/><path d="M17 17l-2-2M31 17l2-2M17 31l-2 2M31 31l2 2" stroke-linecap="round"/></svg></div>
+        <div class="pn">01</div><div class="pt">Bracelet anti-moustique à ultrasons</div><div class="pd">Adapte sa fréquence selon l'espèce détectée.</div><span class="pc">Coût de revient : 8 €</span></div>
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><path d="M8 22c4-8 12-12 16-12s12 4 16 12" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22h24v4H12z" stroke-linejoin="round"/><path d="M16 26v10M32 26v10" stroke-linecap="round"/></svg></div>
+        <div class="pn">02</div><div class="pt">Toile de toiture rétractable autonome</div><div class="pd">Se déploie seule à l'alerte canicule ou grêle.</div><span class="pc">Coût de revient : 140 €</span></div>
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><path d="M19 8h10v5l4 5v20a2 2 0 0 1-2 2H17a2 2 0 0 1-2-2V18l4-5z" stroke-linejoin="round"/><path d="M15 24h18" stroke-dasharray="2 3"/></svg></div>
+        <div class="pn">03</div><div class="pt">Gourde-purificateur d'air portable</div><div class="pd">Filtre les particules fines lors des pics de pollution.</div><span class="pc">Coût de revient : 14 €</span></div>
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><path d="M8 30c8-14 24-14 32 0" stroke-linecap="round"/><path d="M13 30v8h22v-8" stroke-linejoin="round"/><path d="M24 12v6" stroke-linecap="round"/><circle cx="24" cy="9" r="2.4"/></svg></div>
+        <div class="pn">04</div><div class="pt">Tente de camping climatisée solaire</div><div class="pd">Autonome, pour dormir dehors pendant une canicule.</div><span class="pc">Coût de revient : 320 €</span></div>
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><rect x="10" y="10" width="28" height="20" rx="2"/><path d="M10 24h28" stroke-dasharray="2 3"/><path d="M24 30v8" stroke-linecap="round"/><path d="M16 38h16" stroke-linecap="round"/></svg></div>
+        <div class="pn">05</div><div class="pt">Peinture de toiture thermochrome</div><div class="pd">Blanche réfléchissante au-dessus de 30°C, sombre en dessous.</div><span class="pc">Coût de revient : 18 €/L</span></div>
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><path d="M8 12h32M8 20h32M8 28h20" stroke-linecap="round"/><circle cx="36" cy="28" r="3.5"/></svg></div>
+        <div class="pn">06</div><div class="pt">Filet anti-grêle connecté</div><div class="pd">Se déploie seul à l'annonce d'un orage, jardin ou voiture.</div><span class="pc">Coût de revient : 45 €</span></div>
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><path d="M17 6v6M31 6v6M13 12h22l-2 26H15z" stroke-linejoin="round"/></svg></div>
+        <div class="pn">07</div><div class="pt">Gilet réfrigérant à changement de phase</div><div class="pd">Pour tenir une canicule dehors sans clim.</div><span class="pc">Coût de revient : 26 €</span></div>
+      <div class="prod"><span class="tag">Tiré</span>
+        <div class="pv"><svg viewBox="0 0 48 48" fill="none" stroke="var(--ink-soft)" stroke-width="1.6"><circle cx="24" cy="24" r="6"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6M11 11l4 4M33 33l4 4M11 37l4-4M33 15l4-4" stroke-linecap="round"/></svg></div>
+        <div class="pn">08</div><div class="pt">Système d'arrosage piloté par IA</div><div class="pd">Anticipe la météo pour économiser l'eau en restriction.</div><span class="pc">Coût de revient : 78 €</span></div>
+    </div>
+  </section>
+
+  <section id="mix">
+    <div class="eyebrow">Le travail à produire</div>
+    <h2>Le mix, pilier par pilier</h2>
+    <p style="margin-bottom:18px; font-size:14.5px;">Cliquer sur un pilier pour dérouler la consigne détaillée. Les piliers Prix et Communication intègrent un outil de calcul à utiliser en groupe.</p>
+    <div class="pillars">
+
+      <details class="pillar">
+        <summary>
+          <div class="pnum">P</div>
+          <div class="ptitle"><h3>Produit</h3><span>Nom, bénéfice client, différenciation</span></div>
+          <svg class="chev" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="pillarbody">
+          <p>Le pilier Produit pose les bases dont dépendent les trois autres : c'est lui qui définit la cible et la promesse que Prix, Distribution et Communication devront respecter.</p>
+          <ul>
+            <li><strong>Nom et description en une phrase</strong>, rédigée comme une fiche produit, pas un nom de code interne au groupe</li>
+            <li><strong>2 à 3 caractéristiques techniques</strong> du produit : technologie utilisée, matériaux, format, autonomie, portée... ce sont des faits objectifs sur l'objet, pas encore des arguments</li>
+            <li><strong>Bénéfice client principal</strong> : ce que chaque caractéristique change concrètement dans la vie du client, formulé comme un argument de vente et non comme une fiche technique</li>
+            <li><strong>Différenciation</strong> face au concurrent direct cité dans le cadrage : préciser ce qui change dans l'usage, pas seulement un écart de prix</li>
+            <li><strong>Cible précise</strong> reprise du cadrage : âge, situation, moment de vie où le tracas climatique se pose</li>
+          </ul>
+          <div class="askself"><strong>Caractéristique ≠ bénéfice :</strong> caractéristique : « capteur infrarouge intégré ». Bénéfice : « se déploie tout seul avant que la grêle n'abîme la voiture ». Chaque caractéristique listée doit être reliée à un bénéfice.</div>
+          <div class="askself"><strong>Question à se poser :</strong> si on retire le nom de la marque, est-ce que la description suffit à reconnaître le produit parmi les 8 de la banque ?</div>
+          <div class="askself"><strong>Analyser le concurrent, pas juste le nommer :</strong> le concurrent doit être choisi pour le produit précis retenu, pas pour la marque SOS Tracas en général. Préciser dans le rendu : son nom, le prix qu'il pratique, un point fort et une faiblesse ou une limite exploitable.</div>
+          <div class="watch"><strong>Point de vigilance :</strong> un bénéfice reformulé en caractéristique technique (« interface intuitive ») est refusé : reformuler en ce que ça change pour le client (« réserve un créneau en moins de 30 secondes »). Un concurrent cité sans prix ni point fort/faible n'est pas une analyse.</div>
+          <div class="taskbox">
+            <div class="th">✎ À rendre pour ce pilier</div>
+            <ol>
+              <li>Quel nom donnez-vous au produit choisi ?</li>
+              <li>Quelles sont ses 2 à 3 caractéristiques techniques clés ?</li>
+              <li>Quelle cible précise visez-vous (âge, situation, moment où le tracas se pose) ?</li>
+              <li>Pour chaque caractéristique, quel bénéfice client en découle ?</li>
+              <li>Quel concurrent avez-vous analysé pour ce produit précis, avec quel prix, quel point fort et quelle faiblesse ?</li>
+              <li>En quoi votre produit se différencie-t-il de ce concurrent, à partir de sa faiblesse identifiée ?</li>
+            </ol>
+          </div>
+        </div>
+      </details>
+
+      <details class="pillar">
+        <summary>
+          <div class="pnum">€</div>
+          <div class="ptitle"><h3>Prix</h3><span>Coût de revient, marge, prix de vente : outil de calcul</span></div>
+          <svg class="chev" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="pillarbody">
+          <p>Le prix de vente ne se choisit pas au hasard : il part du coût de revient du produit choisi, puis applique une marge cohérente avec le positionnement défini dans le pilier Produit.</p>
+          <ul>
+            <li><strong>Prix de vente précis</strong> (montant chiffré HT et TTC, pas de fourchette large)</li>
+            <li><strong>Logique de fixation</strong> retenue : alignement sur le coût de revient (marge), alignement sur la valeur perçue par le client, ou positionnement face au concurrent cité (au-dessus, en dessous, identique, et pourquoi)</li>
+            <li><strong>Une phrase de justification</strong> reliant le prix choisi à la cible définie dans le pilier Produit</li>
+          </ul>
+
+          <div class="tool">
+            <h4>Outil : calcul du prix de vente</h4>
+            <div class="field">
+              <label for="calcProduct">Produit choisi</label>
+              <select id="calcProduct">
+                <option value="8">Bracelet anti-moustique à ultrasons (coût 8 €)</option>
+                <option value="140">Toile de toiture rétractable autonome (coût 140 €)</option>
+                <option value="14">Gourde-purificateur d'air portable (coût 14 €)</option>
+                <option value="320">Tente de camping climatisée solaire (coût 320 €)</option>
+                <option value="18">Peinture de toiture thermochrome, au litre (coût 18 €)</option>
+                <option value="45">Filet anti-grêle connecté (coût 45 €)</option>
+                <option value="26">Gilet réfrigérant à changement de phase (coût 26 €)</option>
+                <option value="78">Système d'arrosage piloté par IA (coût 78 €)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="calcMarge">Taux de marge souhaité (sur coût de revient)</label>
+              <input type="range" id="calcMarge" min="10" max="300" step="5" value="100">
+              <div class="rangeval"><span>10 %</span><span class="live" id="margeLive">100 %</span><span>300 %</span></div>
+            </div>
+            <div class="results">
+              <div class="result"><div class="rl">Coût de revient</div><div class="rv" id="outCout">8,00 €</div></div>
+              <div class="result"><div class="rl">Marge unitaire</div><div class="rv" id="outMarge">8,00 €</div></div>
+              <div class="result hi"><div class="rl">Prix de vente HT</div><div class="rv" id="outPrixHT">16,00 €</div></div>
+              <div class="result hi"><div class="rl">Prix de vente TTC (20 %)</div><div class="rv" id="outPrixTTC">19,20 €</div></div>
+              <div class="result"><div class="rl">Taux de marque</div><div class="rv" id="outTauxMarque">50,0 %</div></div>
+              <div class="result"><div class="rl">Multiplicateur</div><div class="rv" id="outMulti">×2,00</div></div>
+            </div>
+            <div class="formula">Marge = Prix de vente − Coût de revient · Taux de marque = Marge / Prix de vente</div>
+          </div>
+
+          <div class="watch" style="margin-top:16px;"><strong>Point de vigilance :</strong> un prix donné sans logique de fixation associée n'est pas recevable : tester plusieurs taux de marge avec l'outil, puis choisir celui qui reste cohérent avec la cible et le concurrent cités.</div>
+          <div class="taskbox">
+            <div class="th">✎ À rendre pour ce pilier</div>
+            <ol>
+              <li>Quel taux de marge avez-vous retenu avec l'outil, et pourquoi ce taux plutôt qu'un autre ?</li>
+              <li>Quel est le prix de vente final (HT et TTC) ?</li>
+              <li>Quelle logique de fixation avez-vous suivie : coût de revient, valeur perçue, ou alignement sur le concurrent cité ?</li>
+              <li>En une phrase, pourquoi ce prix correspond-il à la cible définie dans le pilier Produit ?</li>
+            </ol>
+          </div>
+        </div>
+      </details>
+
+      <details class="pillar">
+        <summary>
+          <div class="pnum">D</div>
+          <div class="ptitle"><h3>Distribution</h3><span>Canal principal, canal secondaire</span></div>
+          <svg class="chev" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="pillarbody">
+          <p>La distribution découle directement du prix : un produit premium et un produit accessible ne se vendent pas au même endroit ni de la même manière.</p>
+          <ul>
+            <li><strong>Canal ou canaux choisis</strong> : vente directe (site propre), retail (magasin bricolage, jardinerie), marketplace, réseau de partenaires installateurs</li>
+            <li><strong>Justification par rapport à la cible</strong> : où et comment elle achète habituellement ce type de produit aujourd'hui</li>
+            <li><strong>Priorisation</strong> si plusieurs canaux sont retenus : lequel est principal, lequel est secondaire, et pourquoi celui-là passe en premier</li>
+          </ul>
+          <div class="askself"><strong>Question à se poser :</strong> le canal choisi correspond-il au prix de vente calculé dans le pilier précédent ? Un produit à 320 € se vend rarement en grande surface au même rayon qu'un produit à 8 €.</div>
+          <div class="watch"><strong>Point de vigilance :</strong> un choix large (« partout, en ligne et en magasin ») sans priorisation n'est pas recevable : un canal principal doit être assumé.</div>
+          <div class="taskbox">
+            <div class="th">✎ À rendre pour ce pilier</div>
+            <ol>
+              <li>Quel canal principal choisissez-vous pour vendre le produit ?</li>
+              <li>Pourquoi ce canal correspond-il au prix de vente fixé dans le pilier précédent ?</li>
+              <li>Retenez-vous un canal secondaire ? Si oui, lequel, et pourquoi passe-t-il en second ?</li>
+              <li>En quoi ce choix colle-t-il à la façon dont votre cible achète déjà ce type de produit ?</li>
+            </ol>
+          </div>
+        </div>
+      </details>
+
+      <details class="pillar">
+        <summary>
+          <div class="pnum">C</div>
+          <div class="ptitle"><h3>Communication</h3><span>Budget de 30 000 € à répartir</span></div>
+          <svg class="chev" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="pillarbody">
+          <p>SOS Tracas alloue <strong>30 000 €</strong> au lancement du produit. Le groupe répartit cette enveloppe entre plusieurs leviers, chacun justifié, sans se disperser sur une liste exhaustive juste pour remplir l'outil.</p>
+          <ul>
+            <li><strong>Plusieurs leviers concrets</strong> (réseau précis, partenariat créateurs, SEO/contenu, publicité locale, événementiel), jamais une liste générique de tous les leviers possibles</li>
+            <li><strong>Une campagne publicitaire à concevoir</strong> pour l'un de ces leviers : une accroche et un visuel décrit (ou esquissé), pas seulement une ligne budgétaire. Elle compte comme l'un des leviers retenus, ce n'est pas un exercice à part</li>
+            <li><strong>Un message clé unique</strong>, cohérent avec le prix fixé et la différenciation produit, que l'on retrouve dans l'accroche de la campagne</li>
+            <li><strong>Pour chaque levier retenu</strong>, une phrase expliquant pourquoi il touche la cible définie et pourquoi il reçoit ce montant plutôt qu'un autre</li>
+          </ul>
+
+          <div class="tool">
+            <h4>Outil : plan de communication sur 12 mois</h4>
+            <div class="budgethead">
+              <span class="budgettotal">Budget total : <b id="budgetTotalLabel">30 000 €</b></span>
+            </div>
+            <p style="font-size:13px; color:var(--ink-soft); margin-bottom:10px;">Une carte = une action de communication. Pour chaque action, répartissez son budget mois par mois sur l'année (0 € un mois où elle n'est pas active). La première carte est un exemple, à modifier ou supprimer ; ajoutez vos propres actions avec le bouton.</p>
+            <div class="levers" id="levers"></div>
+            <div class="addLeverRow"><button class="drawbtn" id="addLeverBtn" type="button">+ Ajouter une action</button></div>
+            <div class="budgetbar"><div class="budgetbar-fill" id="budgetFill"></div></div>
+            <div class="budgetstatus">
+              <span>Alloué : <span class="mono" id="budgetSpent">0 €</span></span>
+              <span class="remaining ok" id="budgetRemaining">Reste 30 000 €</span>
+            </div>
+          </div>
+
+          <div class="watch" style="margin-top:16px;"><strong>Point de vigilance :</strong> une liste de leviers sans lien explicite avec la cible ou le positionnement est refusée sans la justification qui la relie aux choix précédents. Un budget dispersé sur 5 ou 6 leviers à parts égales n'est pas un choix : le comité attend une priorisation assumée.</div>
+          <div class="taskbox">
+            <div class="th">✎ À rendre pour ce pilier</div>
+            <ol>
+              <li>Quels leviers avez-vous retenus, campagne publicitaire comprise ?</li>
+              <li>Quel montant avez-vous mis sur chacun, mois par mois, et pourquoi ?</li>
+              <li>Quel est le message clé unique que porte votre communication ?</li>
+              <li>Pour la campagne publicitaire : quelle accroche, quel visuel, et en quoi reprennent-ils le message clé ?</li>
+              <li>En quoi chaque levier choisi touche-t-il spécifiquement la cible définie dans le pilier Produit ?</li>
+            </ol>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <section id="coherence">
+    <div class="eyebrow">Exigence transversale</div>
+    <h2>Cohérence globale</h2>
+    <p style="margin-bottom:14px;">Les 4 piliers doivent former un tout logique, pas quatre réponses juxtaposées.</p>
+    <ul class="coh">
+      <li>Un prix premium suppose une distribution sélective et une communication qui évite le discount agressif</li>
+      <li>Un produit positionné accessible suppose une distribution large et un message centré sur le rapport qualité-prix</li>
+      <li>La cible définie dans le Produit doit se retrouver dans les canaux de Distribution et de Communication</li>
+    </ul>
+    <div class="synth">Rédiger en conclusion une phrase de synthèse du type <em>« notre mix fonctionne parce que… »</em>, qui relie explicitement au moins deux piliers entre eux.</div>
+  </section>
+
+  <section id="livrables">
+    <div class="eyebrow">Restitution</div>
+    <h2>Livrables</h2>
+    <div class="delivs">
+      <div class="deliv"><div class="dh">Rendu papier : le seul livrable</div><p>Un rendu organisé en 4 parties, une par pilier, plus une partie de synthèse avec la phrase de cohérence. Format libre (tableau, schéma, liste), chaque pilier doit rester lisible en un coup d'œil. Le pilier Communication inclut la campagne publicitaire (accroche + visuel). Aucune présentation orale n'est demandée.</p></div>
+    </div>
+  </section>
+
+  <section id="bareme">
+    <div class="eyebrow">Évaluation</div>
+    <h2>Critères d'évaluation</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Critère</th><th>Ce qui est vérifié</th></tr></thead>
+        <tbody>
+          <tr><td>Produit</td><td>Bénéfice client explicite, différenciation claire face au concurrent cité</td></tr>
+          <tr><td>Prix</td><td>Montant chiffré, logique de fixation justifiée, calcul de marge correct</td></tr>
+          <tr><td>Distribution</td><td>Canal priorisé, justifié par la cible</td></tr>
+          <tr><td>Communication</td><td>Budget de 30 000 € réparti mois par mois sur plusieurs leviers justifiés, message clé cohérent</td></tr>
+          <tr><td>Campagne publicitaire</td><td>Accroche et visuel cohérents avec le message clé et la cible, intégrés au rendu écrit</td></tr>
+          <tr><td>Cohérence globale</td><td>Phrase de synthèse reliant explicitement au moins deux piliers</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>SOS Tracas, support de TD, mix marketing</footer>
+</div>
+
+<script>
+(function(){
+  try{
+    // sélection de produit : au clic sur une carte, ou tirage au hasard
+    var btn = document.getElementById('drawBtn');
+    var grid = document.getElementById('prodGrid');
+    if(grid){
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('.prod'));
+
+      function selectCard(card, label){
+        cards.forEach(function(c){
+          c.classList.remove('picked');
+          var t = c.querySelector('.tag');
+          if(t){ t.textContent = 'Tiré'; }
+        });
+        card.classList.add('picked');
+        var tag = card.querySelector('.tag');
+        if(tag){ tag.textContent = label; }
+      }
+
+      cards.forEach(function(card){
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.addEventListener('click', function(){
+          selectCard(card, 'Sélectionné');
+        });
+        card.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            selectCard(card, 'Sélectionné');
+          }
+        });
+      });
+
+      if(btn){
+        btn.addEventListener('click', function(){
+          var pick = cards[Math.floor(Math.random() * cards.length)];
+          selectCard(pick, 'Tiré au sort');
+          pick.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'});
+        });
+      }
+    }
+  }catch(e){}
+
+  try{
+    // calculateur de prix
+    var fmt = function(n){ return n.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}); };
+    var prodSel = document.getElementById('calcProduct');
+    var margeRange = document.getElementById('calcMarge');
+    var margeLive = document.getElementById('margeLive');
+    var outCout = document.getElementById('outCout');
+    var outMarge = document.getElementById('outMarge');
+    var outPrixHT = document.getElementById('outPrixHT');
+    var outPrixTTC = document.getElementById('outPrixTTC');
+    var outTauxMarque = document.getElementById('outTauxMarque');
+    var outMulti = document.getElementById('outMulti');
+
+    function updateCalc(){
+      var cout = parseFloat(prodSel.value);
+      var tauxMarge = parseFloat(margeRange.value);
+      margeLive.textContent = tauxMarge + ' %';
+      var marge = cout * (tauxMarge/100);
+      var prixHT = cout + marge;
+      var prixTTC = prixHT * 1.2;
+      var tauxMarque = prixHT > 0 ? (marge/prixHT)*100 : 0;
+      var multi = cout > 0 ? prixHT/cout : 0;
+      outCout.textContent = fmt(cout) + ' €';
+      outMarge.textContent = fmt(marge) + ' €';
+      outPrixHT.textContent = fmt(prixHT) + ' €';
+      outPrixTTC.textContent = fmt(prixTTC) + ' €';
+      outTauxMarque.textContent = tauxMarque.toFixed(1).replace('.',',') + ' %';
+      outMulti.textContent = '×' + multi.toFixed(2).replace('.',',');
+    }
+    if(prodSel && margeRange){
+      prodSel.addEventListener('input', updateCalc);
+      margeRange.addEventListener('input', updateCalc);
+      updateCalc();
+    }
+  }catch(e){}
+
+  try{
+    // plan de communication : une carte par action, budget réparti sur 12 mois
+    var TOTAL = 30000;
+    var MONTHS_FR = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    var leverContainer = document.getElementById('levers');
+    var addLeverBtn = document.getElementById('addLeverBtn');
+    var spentEl = document.getElementById('budgetSpent');
+    var remainingEl = document.getElementById('budgetRemaining');
+    var fillEl = document.getElementById('budgetFill');
+    var fmt0 = function(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; };
+
+    var leverData = [
+      {name:'Exemple : Réseaux sociaux (lancement)', months:[0,0,0,0,0,3000,2000,500,0,0,0,0]}
+    ];
+
+    function leverTotal(lever){
+      return lever.months.reduce(function(s,v){ return s + (isNaN(v) || v < 0 ? 0 : v); }, 0);
+    }
+
+    function updateBudget(){
+      var spent = leverData.reduce(function(sum, l){ return sum + leverTotal(l); }, 0);
+      var remaining = TOTAL - spent;
+      spentEl.textContent = fmt0(spent);
+      var pct = Math.min(100, (spent/TOTAL)*100);
+      fillEl.style.width = pct + '%';
+      if(remaining < 0){
+        remainingEl.textContent = 'Dépassement de ' + fmt0(Math.abs(remaining));
+        remainingEl.className = 'remaining over';
+        fillEl.classList.add('over');
+      } else {
+        remainingEl.textContent = 'Reste ' + fmt0(remaining);
+        remainingEl.className = 'remaining ok';
+        fillEl.classList.remove('over');
+      }
+    }
+
+    function createLeverCard(lever){
+      var card = document.createElement('div');
+      card.className = 'leverCard';
+
+      var head = document.createElement('div');
+      head.className = 'leverHead';
+
+      var nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.className = 'leverName';
+      nameInput.value = lever.name;
+      nameInput.placeholder = 'Nom de l\'action (ex : partenariat créateurs)';
+      nameInput.addEventListener('input', function(){ lever.name = nameInput.value; });
+
+      var subtotal = document.createElement('span');
+      subtotal.className = 'leverSubtotal';
+      subtotal.textContent = fmt0(leverTotal(lever));
+
+      var delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'leverDel';
+      delBtn.textContent = '×';
+      delBtn.setAttribute('aria-label', 'Supprimer cette action');
+      delBtn.addEventListener('click', function(){
+        var idx = leverData.indexOf(lever);
+        if(idx > -1){ leverData.splice(idx, 1); }
+        card.remove();
+        updateBudget();
+      });
+
+      head.appendChild(nameInput);
+      head.appendChild(subtotal);
+      head.appendChild(delBtn);
+      card.appendChild(head);
+
+      var grid = document.createElement('div');
+      grid.className = 'monthGrid';
+      for(var i = 0; i < 12; i++){
+        (function(i){
+          var cell = document.createElement('div');
+          cell.className = 'monthcell';
+          var label = document.createElement('span');
+          label.className = 'mlabel';
+          label.textContent = MONTHS_FR[i];
+          var input = document.createElement('input');
+          input.type = 'number';
+          input.min = '0';
+          input.step = '100';
+          input.value = String(lever.months[i] || 0);
+          input.setAttribute('aria-label', lever.name + ' : ' + MONTHS_FR[i]);
+          input.addEventListener('input', function(){
+            var v = parseFloat(input.value);
+            lever.months[i] = isNaN(v) ? 0 : v;
+            subtotal.textContent = fmt0(leverTotal(lever));
+            updateBudget();
+          });
+          cell.appendChild(label);
+          cell.appendChild(input);
+          grid.appendChild(cell);
+        })(i);
+      }
+      card.appendChild(grid);
+      return card;
+    }
+
+    if(leverContainer){
+      leverData.forEach(function(lever){ leverContainer.appendChild(createLeverCard(lever)); });
+      updateBudget();
+
+      if(addLeverBtn){
+        addLeverBtn.addEventListener('click', function(){
+          var lever = {name:'', months:[0,0,0,0,0,0,0,0,0,0,0,0]};
+          leverData.push(lever);
+          leverContainer.appendChild(createLeverCard(lever));
+          updateBudget();
+        });
+      }
+    }
+  }catch(e){}
+})();
+</script>
